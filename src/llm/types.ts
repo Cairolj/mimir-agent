@@ -1,6 +1,6 @@
 import type { TaskStep } from '../agents/types.js';
 
-export type LLMProviderName = 'ollama' | 'openai' | 'anthropic';
+export type LLMProviderName = 'ollama' | 'openai' | 'anthropic' | 'sampling';
 
 export interface LLMConfig {
   provider: LLMProviderName;
