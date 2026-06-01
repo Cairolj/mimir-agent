@@ -1,4 +1,4 @@
-import type { TaskStep } from '../types';
+import type { TaskStep } from '../types.js';
 import { nanoid } from 'nanoid';
 
 export class PlannerHandler {

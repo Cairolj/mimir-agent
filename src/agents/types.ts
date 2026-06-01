@@ -1,4 +1,4 @@
-import type { AgentType } from '../types';
+import type { AgentType } from '../types.js';
 
 export interface TaskStep {
   id: string;

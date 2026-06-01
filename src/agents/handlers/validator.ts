@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import type { StepResult } from '../types';
+import type { StepResult } from '../types.js';
 
 interface ValidationCheck {
   name: string;

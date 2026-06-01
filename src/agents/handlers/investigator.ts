@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import type { TaskStep, StepResult } from '../types';
+import type { TaskStep, StepResult } from '../types.js';
 
 export class InvestigatorHandler {
   private timeoutMs: number;

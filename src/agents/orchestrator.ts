@@ -1,10 +1,10 @@
 import { nanoid } from 'nanoid';
-import type { TaskStep, StepResult, RunResult } from './types';
-import { PlannerHandler } from './handlers/planner';
-import { ExecutorHandler } from './handlers/executor';
-import { InvestigatorHandler } from './handlers/investigator';
-import { ValidatorHandler } from './handlers/validator';
-import { CriticHandler } from './handlers/critic';
+import type { TaskStep, StepResult, RunResult } from './types.js';
+import { PlannerHandler } from './handlers/planner.js';
+import { ExecutorHandler } from './handlers/executor.js';
+import { InvestigatorHandler } from './handlers/investigator.js';
+import { ValidatorHandler } from './handlers/validator.js';
+import { CriticHandler } from './handlers/critic.js';
 
 export class AgentOrchestrator {
   private actors: Record<string, { execute(step: TaskStep): Promise<StepResult> }>;

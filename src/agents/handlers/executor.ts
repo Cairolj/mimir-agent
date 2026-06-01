@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 import { nanoid } from 'nanoid';
-import type { TaskStep, StepResult } from '../types';
+import type { TaskStep, StepResult } from '../types.js';
 
 export class ExecutorHandler {
   private timeoutMs: number;
