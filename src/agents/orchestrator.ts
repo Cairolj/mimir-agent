@@ -22,7 +22,7 @@ export class AgentOrchestrator {
     const validator = new ValidatorHandler();
     const critic = new CriticHandler();
 
-    const plan = planner.decompose(description);
+    const plan = await planner.decompose(description);
     if (plan.length === 0) {
       return { taskDescription: description, plan: [], results: [], totalDuration: 0, success: false };
     }
