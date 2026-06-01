@@ -24,13 +24,11 @@ function readConfigFile(): ConfigFile {
   }
 }
 
-export function loadLLMConfig(): LLMConfig {
+export function loadLLMConfig(): LLMConfig | null {
   const file = readConfigFile();
 
   const provider = (process.env.MIMIR_LLM_PROVIDER || file.llm?.provider || '') as LLMProviderName;
-  if (!provider) {
-    throw new Error('No LLM provider configured. Set MIMIR_LLM_PROVIDER=ollama|openai|anthropic or create ~/.mimir/config.json');
-  }
+  if (!provider) return null;
 
   return {
     provider,

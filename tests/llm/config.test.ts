@@ -9,9 +9,9 @@ describe('LLM Config', () => {
     delete process.env.MIMIR_OLLAMA_MODEL;
   });
 
-  it('should throw if no provider configured', async () => {
+  it('should return null if no provider configured', async () => {
     const { loadLLMConfig } = await import('../../src/llm/config.js');
-    expect(() => loadLLMConfig()).toThrow('No LLM provider configured');
+    expect(loadLLMConfig()).toBeNull();
   });
 
   it('should load provider from env var', async () => {
