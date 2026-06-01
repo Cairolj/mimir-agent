@@ -8,7 +8,7 @@ import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { createStore, type MemoryStore } from './memory/store.js';
 import { LearningEngine } from './memory/learning.js';
 import { AgentRegistry } from './agents/registry.js';
-import { AgentOrchestrator } from './agents/orchestrator.js';
+import { AgentOrchestrator, type Planner } from './agents/orchestrator.js';
 import { nanoid } from 'nanoid';
 
 interface TaskRecord {
@@ -26,11 +26,11 @@ export class MimirServer {
   private tasks: Map<string, TaskRecord> = new Map();
   private mcpServer: Server;
 
-  constructor(dbPath: string) {
+  constructor(dbPath: string, planner?: Planner) {
     this.store = createStore(dbPath);
     this.learning = new LearningEngine(this.store);
     this.registry = new AgentRegistry();
-    this.orchestrator = new AgentOrchestrator();
+    this.orchestrator = new AgentOrchestrator(planner);
     this.setupDefaultAgents();
     this.mcpServer = this.createMcpServer();
   }
@@ -151,6 +151,6 @@ export class MimirServer {
   }
 }
 
-export function createMimirServer(dbPath: string): MimirServer {
-  return new MimirServer(dbPath);
+export function createMimirServer(dbPath: string, planner?: Planner): MimirServer {
+  return new MimirServer(dbPath, planner);
 }

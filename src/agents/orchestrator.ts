@@ -6,23 +6,28 @@ import { InvestigatorHandler } from './handlers/investigator.js';
 import { ValidatorHandler } from './handlers/validator.js';
 import { CriticHandler } from './handlers/critic.js';
 
+export interface Planner {
+  decompose(description: string): Promise<TaskStep[]>;
+}
+
 export class AgentOrchestrator {
   private actors: Record<string, { execute(step: TaskStep): Promise<StepResult> }>;
+  private planner: Planner;
 
-  constructor() {
+  constructor(planner?: Planner) {
     this.actors = {
       executor: new ExecutorHandler(),
       investigator: new InvestigatorHandler(),
     };
+    this.planner = planner ?? new PlannerHandler();
   }
 
   async runTask(description: string): Promise<RunResult> {
     const start = Date.now();
-    const planner = new PlannerHandler();
     const validator = new ValidatorHandler();
     const critic = new CriticHandler();
 
-    const plan = await planner.decompose(description);
+    const plan = await this.planner.decompose(description);
     if (plan.length === 0) {
       return { taskDescription: description, plan: [], results: [], totalDuration: 0, success: false };
     }

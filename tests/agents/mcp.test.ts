@@ -43,7 +43,16 @@ describe('MimirServer', () => {
   });
 
   it('should run a task and return execution results', async () => {
-    const server = createMimirServer(':memory:');
+    const mockPlanner = {
+      decompose: async (description: string) => [{
+        id: 's1',
+        agentType: 'executor' as const,
+        command: description,
+        description: description.substring(0, 20),
+        dependsOn: [] as string[],
+      }],
+    };
+    const server = createMimirServer(':memory:', mockPlanner);
     const result = await server.executeTool('mimir_run_task', { description: 'echo hello from mimir' });
     const data = JSON.parse(result.content[0].text);
     expect(data.taskDescription).toBe('echo hello from mimir');
