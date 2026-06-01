@@ -1,6 +1,6 @@
 {
   "name": "mimir-agent",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Multi-agent self-improving system with shared experiential memory and parallel agent execution",
   "type": "module",
   "bin": {
@@ -22,7 +22,6 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "better-sqlite3": "^11.0.0",
-    "express": "^5.2.1",
     "nanoid": "^5.0.0",
     "zod": "^3.23.0"
   },
