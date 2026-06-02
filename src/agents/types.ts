@@ -30,3 +30,17 @@ export interface AgentActor {
   type: AgentType;
   execute(step: TaskStep): Promise<StepResult>;
 }
+
+export interface WebSearchResult {
+  query: string;
+  abstract?: string;
+  source?: string;
+  heading?: string;
+  image?: string;
+  relatedTopics: Array<{ text: string; url: string }>;
+  infobox?: { heading: string; content: string; url?: string };
+}
+
+export interface IWebSearchService {
+  search(query: string): Promise<WebSearchResult>;
+}
