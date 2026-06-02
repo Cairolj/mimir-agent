@@ -1,4 +1,4 @@
-# Mimir Agent (`mimir-agent`)
+# Mimir Agent (`mimir-mcp-agent`)
 
 Multi-agent self-improving system with shared experiential memory and parallel agent execution.
 
@@ -9,7 +9,7 @@ Mimir is a local-first, MCP-native platform where specialized AI agents collabor
 ### Zero install (recommended)
 
 ```bash
-npx mimir-agent
+npx mimir-mcp-agent
 ```
 
 This downloads and starts the MCP server on stdio. Configure your editor (see below) and restart.
@@ -28,7 +28,7 @@ node dist/cli.js
 
 Choose your approach:
 
-- **`npx mimir-agent`** — run instantly, no local setup (auto-caches after first download)
+- **`npx mimir-mcp-agent`** — run instantly, no local setup (auto-caches after first download)
 - **`node <path>/dist/cli.js`** — local development, no network dependency
 
 ### Windsurf
@@ -40,7 +40,7 @@ Choose your approach:
   "mcpServers": {
     "mimir": {
       "command": "npx",
-      "args": ["mimir-agent"],
+      "args": ["mimir-mcp-agent"],
       "env": {
         "MIMIR_DB_PATH": "%USERPROFILE%\\.mimir\\memory.db"
       }
@@ -73,7 +73,7 @@ Choose your approach:
   "mcpServers": {
     "mimir": {
       "command": "npx",
-      "args": ["mimir-agent"]
+      "args": ["mimir-mcp-agent"]
     }
   }
 }
@@ -88,7 +88,7 @@ Choose your approach:
   "mcpServers": {
     "mimir": {
       "command": "npx",
-      "args": ["mimir-agent"]
+      "args": ["mimir-mcp-agent"]
     }
   }
 }
@@ -103,7 +103,7 @@ Choose your approach:
   "mcpServers": {
     "mimir": {
       "command": "npx",
-      "args": ["mimir-agent"]
+      "args": ["mimir-mcp-agent"]
     }
   }
 }
@@ -112,7 +112,7 @@ Choose your approach:
 ### Verify it works
 
 ```bash
-npx mimir-agent start
+npx mimir-mcp-agent start
 ```
 
 The server prints `Starting Mimir MCP server on stdio...` and listens on stdio. Once connected to your editor, the MCP tools appear in the client UI.
@@ -120,7 +120,7 @@ The server prints `Starting Mimir MCP server on stdio...` and listens on stdio. 
 Test from the terminal:
 
 ```bash
-npx mimir-agent run "echo test"
+npx mimir-mcp-agent run "echo test"
 # → { results: [{ status: "success", output: "test\r\n", duration: 30 }] }
 ```
 
@@ -159,16 +159,16 @@ Example prompts for Cascade in Windsurf:
 ## CLI
 
 ```bash
-npm run build        # Compile TypeScript to JS
-node dist/cli.js     # Start MCP server (default)
-npx mimir            # Start MCP server (from npm)
-npx mimir start      # Same
-npx mimir run <desc> # Run a task through agent orchestration
-npx mimir stats      # Show learning statistics
-npx mimir agents     # List available agent types
-mimir start          # Same, if installed globally
-mimir run <desc>     # Run a task
-mimir --help         # Show help
+npm run build               # Compile TypeScript to JS
+node dist/cli.js            # Start MCP server (default)
+npx mimir-mcp-agent         # Start MCP server (from npm)
+npx mimir-mcp-agent start   # Same
+npx mimir-mcp-agent run <desc> # Run a task through agent orchestration
+npx mimir-mcp-agent stats   # Show learning statistics
+npx mimir-mcp-agent agents  # List available agent types
+mimir start                 # Same, if installed globally
+mimir run <desc>            # Run a task
+mimir --help                # Show help
 ```
 
 ## Development
@@ -185,7 +185,7 @@ Requires Node.js 20+.
 ## Tests
 
 ```bash
-npx vitest run                       # All tests (46 passing)
+npx vitest run                       # All tests (66 passing)
 npx vitest run tests/demo.test.ts    # Multi-agent demo (parallel execution)
 npx vitest run --reporter=verbose    # Verbose output
 ```
@@ -249,7 +249,7 @@ All data is stored locally in SQLite. Set `MIMIR_DB_PATH` environment variable t
 
 ```bash
 set MIMIR_DB_PATH=C:\Users\youruser\.mimir\memory.db
-npx mimir-agent
+npx mimir-mcp-agent
 ```
 
 Default: `~/.mimir/experience.db`
