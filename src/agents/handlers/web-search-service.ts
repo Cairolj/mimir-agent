@@ -26,14 +26,16 @@ export class WebSearchService implements IWebSearchService {
       clearTimeout(timer);
 
       if (!response.ok) {
-        return emptyResult(query);
+        throw new Error(`DuckDuckGo API returned ${response.status}`);
       }
 
-      const data = await response.json();
+      const text = await response.text();
+      if (!text) return { query, relatedTopics: [] };
+      const data = JSON.parse(text);
       return parseDdgResponse(query, data);
-    } catch {
+    } catch (err) {
       clearTimeout(timer);
-      return emptyResult(query);
+      throw err;
     }
   }
 
@@ -54,6 +56,10 @@ export function formatToText(result: WebSearchResult): string {
     }
   }
 
+  if (result.image) {
+    parts.push(`Image: ${result.image}`);
+  }
+
   if (result.relatedTopics.length > 0) {
     parts.push('Related topics:');
     for (const topic of result.relatedTopics) {
@@ -69,10 +75,6 @@ export function formatToText(result: WebSearchResult): string {
   }
 
   return parts.join('\n') || 'No se encontraron resultados.';
-}
-
-function emptyResult(query: string): WebSearchResult {
-  return { query, relatedTopics: [] };
 }
 
 interface DdgResponse {

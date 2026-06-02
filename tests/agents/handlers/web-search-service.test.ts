@@ -16,10 +16,9 @@ describe('WebSearchService', () => {
     expect(result.relatedTopics).toEqual([]);
   }, 10000);
 
-  it('should return gracefully on network failure', async () => {
+  it('should throw on network failure', async () => {
     const failService = new WebSearchService(1);
-    const result = await failService.search('test');
-    expect(result.relatedTopics).toEqual([]);
+    await expect(failService.search('test')).rejects.toThrow();
   }, 10000);
 
   it('should format result to text with heading and topics', async () => {

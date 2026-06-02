@@ -18,6 +18,13 @@ describe('InvestigatorHandler', () => {
     expect(result.status).toBe('failure');
     expect(result.error).toBeTruthy();
   }, 15000);
+
+  it('should reject search command without WebSearchService', async () => {
+    const step = { id: 's5', agentType: 'investigator' as const, command: 'search:test', description: '', dependsOn: [] };
+    const result = await investigator.execute(step);
+    expect(result.status).toBe('failure');
+    expect(result.error).toContain('requires a WebSearchService');
+  });
 });
 
 describe('InvestigatorHandler with WebSearchService', () => {

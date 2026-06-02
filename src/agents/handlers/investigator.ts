@@ -16,8 +16,8 @@ export class InvestigatorHandler {
 
   async execute(step: TaskStep): Promise<StepResult> {
     const start = Date.now();
-    try {
-      if (step.command.startsWith('search:')) {
+    if (step.command.startsWith('search:')) {
+      try {
         if (!this.webSearch) {
           return {
             stepId: step.id,
@@ -41,10 +41,22 @@ export class InvestigatorHandler {
           output: output.substring(0, 2000),
           duration,
         };
+      } catch (err) {
+        return {
+          stepId: step.id,
+          agentId: `investigator-${nanoid(8)}`,
+          agentType: 'investigator',
+          status: 'failure',
+          output: '',
+          error: (err as Error).message,
+          duration: Date.now() - start,
+        };
       }
+    }
 
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+    try {
       const response = await fetch(step.command, { signal: controller.signal });
       clearTimeout(timer);
       const text = await response.text();
@@ -58,6 +70,7 @@ export class InvestigatorHandler {
         duration,
       };
     } catch (err) {
+      clearTimeout(timer);
       const duration = Date.now() - start;
       return {
         stepId: step.id,
