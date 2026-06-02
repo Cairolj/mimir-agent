@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { mkdirSync } from 'fs';
 import { dirname } from 'path';
 import { MimirServer } from './server.js';
