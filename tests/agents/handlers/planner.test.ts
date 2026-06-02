@@ -16,7 +16,7 @@ describe('PlannerHandler', () => {
   it('should throw when no LLM provider configured', async () => {
     const { PlannerHandler } = await import('../../../src/agents/handlers/planner.js');
     const planner = new PlannerHandler();
-    await expect(planner.decompose('do something')).rejects.toThrow('No LLM provider configured');
+    await expect(planner.decompose('do something')).rejects.toThrow('No LLM available');
   });
 
   it('should throw error for unknown provider', async () => {

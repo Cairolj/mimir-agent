@@ -1,3 +1,4 @@
+import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { nanoid } from 'nanoid';
 import type { TaskStep, StepResult, RunResult } from './types.js';
 import { PlannerHandler } from './handlers/planner.js';
@@ -14,12 +15,12 @@ export class AgentOrchestrator {
   private actors: Record<string, { execute(step: TaskStep): Promise<StepResult> }>;
   private planner: Planner;
 
-  constructor(planner?: Planner) {
+  constructor(planner?: Planner, private mcpServer?: Server) {
     this.actors = {
       executor: new ExecutorHandler(),
       investigator: new InvestigatorHandler(),
     };
-    this.planner = planner ?? new PlannerHandler();
+    this.planner = planner ?? new PlannerHandler(this.mcpServer);
   }
 
   async runTask(description: string): Promise<RunResult> {

@@ -30,9 +30,10 @@ export class MimirServer {
     this.store = createStore(dbPath);
     this.learning = new LearningEngine(this.store);
     this.registry = new AgentRegistry();
-    this.orchestrator = new AgentOrchestrator(planner);
+    this.mcpServer = new Server({ name: 'mimir', version: '0.1.0' }, { capabilities: { tools: {} } });
+    this.orchestrator = new AgentOrchestrator(planner, this.mcpServer);
     this.setupDefaultAgents();
-    this.mcpServer = this.createMcpServer();
+    this.setupMcpHandlers();
   }
 
   private setupDefaultAgents(): void {
@@ -132,17 +133,15 @@ export class MimirServer {
     }
   }
 
-  private createMcpServer(): Server {
-    const server = new Server({ name: 'mimir', version: '0.1.0' }, { capabilities: { tools: {} } });
-    server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: this.getToolDefinitions() }));
-    server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  private setupMcpHandlers(): void {
+    this.mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: this.getToolDefinitions() }));
+    this.mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
       try {
         return await this.executeTool(request.params.name, request.params.arguments ?? {});
       } catch (error) {
         return { content: [{ type: 'text', text: JSON.stringify({ error: (error as Error).message }) }], isError: true };
       }
     });
-    return server;
   }
 
   async start(): Promise<void> {
