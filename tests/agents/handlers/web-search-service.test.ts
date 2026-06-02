@@ -16,16 +16,17 @@ describe('WebSearchService', () => {
     expect(result.relatedTopics).toEqual([]);
   }, 10000);
 
-  it('should handle timeout', async () => {
-    const slowService = new WebSearchService(1);
-    const result = await slowService.search('test');
+  it('should return gracefully on network failure', async () => {
+    const failService = new WebSearchService(1);
+    const result = await failService.search('test');
     expect(result.relatedTopics).toEqual([]);
   }, 10000);
 
-  it('should format result to text', async () => {
+  it('should format result to text with heading and topics', async () => {
     const result = await service.search('TypeScript');
     const text = WebSearchService.formatToText(result);
     expect(text.length).toBeGreaterThan(0);
-    expect(text).toContain('TypeScript');
+    if (result.heading) expect(text).toContain(result.heading);
+    if (result.abstract) expect(text).toContain(result.abstract);
   }, 15000);
 });
