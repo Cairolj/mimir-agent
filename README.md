@@ -116,17 +116,17 @@ Choose your approach:
 
 ### Smoke Test
 
-Pega esto en el chat de tu editor para verificar que Mimir funciona:
+Paste this into your editor's chat to verify Mimir works:
 
-> Quiero probar que Mimir funciona correctamente. Ejecuta estos pasos en orden:
+> Test that Mimir is working correctly. Run these steps in order:
 >
-> 1. Usa `mimir_list_agents` para mostrar los agentes disponibles
-> 2. Usa `mimir_get_stats` para mostrar las estadísticas de aprendizaje
-> 3. Usa `mimir_run_task` para ejecutar `echo "hello from Mimir agents"`
-> 4. Usa `mimir_get_advice` con la descripción `"run a shell command"`
-> 5. Usa `mimir_submit_task` para registrar `"test completed successfully"` con contexto `{"test": "smoke", "result": "ok"}`
+> 1. Use `mimir_list_agents` to show available agents
+> 2. Use `mimir_get_stats` to show learning statistics
+> 3. Use `mimir_run_task` to run `echo "hello from Mimir agents"`
+> 4. Use `mimir_get_advice` with description `"run a shell command"`
+> 5. Use `mimir_submit_task` to record `"test completed successfully"` with context `{"test": "smoke", "result": "ok"}`
 >
-> Muestra el resultado de cada paso.
+> Show the result of each step.
 
 ## Features
 
