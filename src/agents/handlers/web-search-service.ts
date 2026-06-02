@@ -37,36 +37,38 @@ export class WebSearchService implements IWebSearchService {
     }
   }
 
-  static formatToText(result: WebSearchResult): string {
-    const parts: string[] = [];
+}
 
-    if (result.heading) {
-      parts.push(`# ${result.heading}`);
-    }
 
-    if (result.abstract) {
-      parts.push(result.abstract);
-      if (result.source) {
-        parts.push(`Source: ${result.source}`);
-      }
-    }
+export function formatToText(result: WebSearchResult): string {
+  const parts: string[] = [];
 
-    if (result.relatedTopics.length > 0) {
-      parts.push('Related topics:');
-      for (const topic of result.relatedTopics) {
-        parts.push(`- ${topic.text} (${topic.url})`);
-      }
-    }
-
-    if (result.infobox) {
-      parts.push(`---\n${result.infobox.heading}: ${result.infobox.content}`);
-      if (result.infobox.url) {
-        parts.push(`Info: ${result.infobox.url}`);
-      }
-    }
-
-    return parts.join('\n') || 'No se encontraron resultados.';
+  if (result.heading) {
+    parts.push(`# ${result.heading}`);
   }
+
+  if (result.abstract) {
+    parts.push(result.abstract);
+    if (result.source) {
+      parts.push(`Source: ${result.source}`);
+    }
+  }
+
+  if (result.relatedTopics.length > 0) {
+    parts.push('Related topics:');
+    for (const topic of result.relatedTopics) {
+      parts.push(`- ${topic.text} (${topic.url})`);
+    }
+  }
+
+  if (result.infobox) {
+    parts.push(`---\n${result.infobox.heading}: ${result.infobox.content}`);
+    if (result.infobox.url) {
+      parts.push(`Info: ${result.infobox.url}`);
+    }
+  }
+
+  return parts.join('\n') || 'No se encontraron resultados.';
 }
 
 function emptyResult(query: string): WebSearchResult {

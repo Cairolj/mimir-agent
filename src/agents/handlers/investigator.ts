@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import type { TaskStep, StepResult } from '../types.js';
 import type { IWebSearchService } from '../types.js';
-import { WebSearchService } from './web-search-service.js';
+import { formatToText } from './web-search-service.js';
 
 export class InvestigatorHandler {
   private timeoutMs: number;
@@ -17,10 +17,21 @@ export class InvestigatorHandler {
   async execute(step: TaskStep): Promise<StepResult> {
     const start = Date.now();
     try {
-      if (step.command.startsWith('search:') && this.webSearch) {
+      if (step.command.startsWith('search:')) {
+        if (!this.webSearch) {
+          return {
+            stepId: step.id,
+            agentId: `investigator-${nanoid(8)}`,
+            agentType: 'investigator',
+            status: 'failure',
+            output: '',
+            error: 'search: command requires a WebSearchService',
+            duration: Date.now() - start,
+          };
+        }
         const query = step.command.slice(7);
         const result = await this.webSearch.search(query);
-        const output = WebSearchService.formatToText(result);
+        const output = formatToText(result);
         const duration = Date.now() - start;
         return {
           stepId: step.id,

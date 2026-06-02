@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { WebSearchService } from '../../../src/agents/handlers/web-search-service.js';
+import { WebSearchService, formatToText } from '../../../src/agents/handlers/web-search-service.js';
 
 describe('WebSearchService', () => {
   const service = new WebSearchService();
@@ -24,7 +24,7 @@ describe('WebSearchService', () => {
 
   it('should format result to text with heading and topics', async () => {
     const result = await service.search('TypeScript');
-    const text = WebSearchService.formatToText(result);
+    const text = formatToText(result);
     expect(text.length).toBeGreaterThan(0);
     if (result.heading) expect(text).toContain(result.heading);
     if (result.abstract) expect(text).toContain(result.abstract);
