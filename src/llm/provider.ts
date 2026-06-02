@@ -24,7 +24,7 @@ export const SYSTEM_PROMPT = `You are a task planner. Given a task description, 
 
 Available agent types:
 - executor: runs shell commands via child_process.exec
-- investigator: fetches HTTP URLs
+- investigator: fetches a URL or performs a web search (prefix command with "search:"), returns the content
 
 Return a JSON array of steps:
 [
