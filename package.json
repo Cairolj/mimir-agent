@@ -1,6 +1,6 @@
 {
   "name": "mimir-mcp-agent",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Multi-agent self-improving system with shared experiential memory and parallel agent execution",
   "type": "module",
   "bin": {
