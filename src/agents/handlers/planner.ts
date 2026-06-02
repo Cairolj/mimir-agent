@@ -19,10 +19,7 @@ export class PlannerHandler {
     } else if (this.mcpServer) {
       provider = new SamplingProvider(this.mcpServer);
     } else {
-      throw new Error(
-        'No LLM available. The MCP server must be connected to use the editor\'s LLM, ' +
-        'or configure an external provider via MIMIR_LLM_PROVIDER.',
-      );
+      return this.fallbackDecompose(description);
     }
 
     try {
@@ -36,9 +33,65 @@ export class PlannerHandler {
       }));
     } catch (err) {
       if (err instanceof LLMError) {
+        const msg = err.message.toLowerCase();
+        if (msg.includes('no sampling handler') || msg.includes('sampling not supported')) {
+          return this.fallbackDecompose(description);
+        }
         throw new Error(`Planning failed (${err.provider}): ${err.message}`);
       }
-      throw err;
+      return this.fallbackDecompose(description);
     }
+  }
+
+  private fallbackDecompose(description: string): TaskStep[] {
+    const trimmed = description.trim();
+    if (!trimmed) return [];
+
+    if (/^https?:\/\//i.test(trimmed)) {
+      return [{
+        id: this.shortId(),
+        agentType: 'investigator',
+        command: trimmed,
+        description: trimmed.substring(0, 50),
+        dependsOn: [],
+      }];
+    }
+
+    if (/^search:/i.test(trimmed)) {
+      return [{
+        id: this.shortId(),
+        agentType: 'investigator',
+        command: trimmed,
+        description: `Search: ${trimmed.replace(/^search:\s*/i, '').substring(0, 40)}`,
+        dependsOn: [],
+      }];
+    }
+
+    const commands = trimmed.split(/\s*&&\s*/).filter(Boolean);
+    if (commands.length > 1) {
+      const steps: TaskStep[] = [];
+      for (let i = 0; i < commands.length; i++) {
+        steps.push({
+          id: this.shortId(),
+          agentType: 'executor',
+          command: commands[i].trim(),
+          description: commands[i].trim().substring(0, 50),
+          dependsOn: i > 0 ? [steps[i - 1].id] : [],
+        });
+      }
+      return steps;
+    }
+
+    return [{
+      id: this.shortId(),
+      agentType: 'executor',
+      command: trimmed,
+      description: trimmed.substring(0, 50),
+      dependsOn: [],
+    }];
+  }
+
+  private shortId(): string {
+    return Math.random().toString(36).substring(2, 8);
   }
 }
