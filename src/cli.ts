@@ -52,14 +52,20 @@ async function main() {
       break;
     }
     case 'run': {
-      const description = process.argv[3];
-      if (!description) { console.error('Usage: mimir run <description>'); process.exit(1); }
-      const dbPath = getDbPath();
-      ensureDir(dbPath);
-      const result = await new MimirServer(dbPath).executeTool('mimir_run_task', { description });
-      const data = JSON.parse(result.content[0].text);
-      console.log(JSON.stringify(data, null, 2));
-      process.exit(0);
+      const command = process.argv[3];
+      if (!command) { console.error('Usage: mimir run <command>'); process.exit(1); }
+      const { ExecutorHandler } = await import('./agents/handlers/executor.js');
+      const executor = new ExecutorHandler();
+      const result = await executor.execute({
+        id: 'cli-run',
+        agentType: 'executor',
+        command,
+        description: `Run: ${command}`,
+        dependsOn: [],
+      });
+      if (result.output) process.stdout.write(result.output);
+      if (result.error) process.stderr.write(result.error + '\n');
+      process.exit(result.status === 'success' ? 0 : 1);
       break;
     }
     case 'help':
@@ -74,7 +80,7 @@ Usage:
   mimir submit <desc>      Submit a task to learn from
   mimir stats              Show learning statistics
   mimir agents             List available agent types
-  mimir run <desc>         Run a task through agent orchestration
+  mimir run <command>      Run a shell command directly
       `);
       process.exit(0);
     }
